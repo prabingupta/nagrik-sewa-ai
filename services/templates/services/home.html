@@ -238,15 +238,15 @@
     <span>Nagarik <span style="color:#7fd6a8;">Sewa</span> AI</span>
   </div>
   <nav>
-    <a href="/">Home</a>
-    <a href="#popular">Services</a>
-    <a href="#about">About</a>
+    <a href="/" id="nav-home">Home</a>
+    <a href="#popular" id="nav-services">Services</a>
+    <a href="#about" id="nav-about">About</a>
   </nav>
 </header>
 
 <section class="hero">
-  <h1>Government Service Guidance, Simplified</h1>
-  <p>Ask about any government service, such as passport, citizenship, or driving license, and get clear, step-by-step guidance instantly.</p>
+  <h1 id="hero-title">Government Service Guidance, Simplified</h1>
+  <p id="hero-subtitle">Ask about any government service, such as passport, citizenship, or driving license, and get clear, step-by-step guidance instantly.</p>
 
   <div class="search-box">
     <input type="text" id="question-input" placeholder="e.g. How do I renew my driving license?">
@@ -260,7 +260,7 @@
 
 <main>
   <section class="popular" id="popular">
-    <h2>Popular Services</h2>
+    <h2 id="popular-heading">Popular Services</h2>
     <div class="service-grid">
       {% for service in popular_services %}
       <div class="service-card" data-question="How do I apply for {{ service.name }}?">
@@ -268,25 +268,93 @@
         <div class="name-ne">{{ service.name_nepali }}</div>
       </div>
       {% empty %}
-      <p style="color: var(--text-light);">No popular services added yet. Add some from the admin panel.</p>
+      <p style="color: var(--text-light);" id="no-services-msg">No popular services added yet. Add some from the admin panel.</p>
       {% endfor %}
     </div>
   </section>
 
-  <div id="loading">Fetching guidance…</div>
+  <div id="loading">Fetching guidance...</div>
   <div id="error-box"></div>
 
   <section class="results" id="results">
-    <h2>Guidance</h2>
+    <h2 id="guidance-heading">Guidance</h2>
     <div id="result-content"></div>
   </section>
 </main>
 
 <footer id="about">
-  Nagarik Sewa AI is an independent project to help citizens navigate government services. It is not an official government website.
+  <span id="footer-text">Nagarik Sewa AI is an independent project to help citizens navigate government services. It is not an official government website.</span>
 </footer>
 
 <script>
+  const translations = {
+    en: {
+      navHome: "Home",
+      navServices: "Services",
+      navAbout: "About",
+      heroTitle: "Government Service Guidance, Simplified",
+      heroSubtitle: "Ask about any government service, such as passport, citizenship, or driving license, and get clear, step-by-step guidance instantly.",
+      placeholder: "e.g. How do I renew my driving license?",
+      askBtn: "Ask",
+      popularHeading: "Popular Services",
+      noServices: "No popular services added yet. Add some from the admin panel.",
+      guidanceHeading: "Guidance",
+      loading: "Fetching guidance...",
+      footerText: "Nagarik Sewa AI is an independent project to help citizens navigate government services. It is not an official government website.",
+      steps: "Steps",
+      documents: "Required Documents",
+      tips: "Tips",
+      cost: "Estimated Cost",
+      office: "Where to Go",
+      noSteps: "No steps available.",
+      noDocuments: "No documents listed.",
+      notSpecified: "Not specified",
+      guidanceFallback: "Guidance"
+    },
+    ne: {
+      navHome: "गृहपृष्ठ",
+      navServices: "सेवाहरू",
+      navAbout: "बारेमा",
+      heroTitle: "सरकारी सेवा मार्गदर्शन, सरलीकृत",
+      heroSubtitle: "राहदानी, नागरिकता, वा सवारी चालक अनुमतिपत्र जस्ता कुनै पनि सरकारी सेवाको बारेमा सोध्नुहोस् र तुरुन्तै स्पष्ट, चरणबद्ध मार्गदर्शन प्राप्त गर्नुहोस्।",
+      placeholder: "जस्तै: सवारी चालक अनुमतिपत्र कसरी नवीकरण गर्ने?",
+      askBtn: "सोध्नुहोस्",
+      popularHeading: "लोकप्रिय सेवाहरू",
+      noServices: "अहिलेसम्म कुनै लोकप्रिय सेवा थपिएको छैन। एडमिन प्यानलबाट थप्नुहोस्।",
+      guidanceHeading: "मार्गदर्शन",
+      loading: "मार्गदर्शन प्राप्त गरिँदैछ...",
+      footerText: "नागरिक सेवा एआई नागरिकहरूलाई सरकारी सेवाहरूमा मार्गदर्शन गर्न बनाइएको स्वतन्त्र परियोजना हो। यो कुनै आधिकारिक सरकारी वेबसाइट होइन।",
+      steps: "चरणहरू",
+      documents: "आवश्यक कागजातहरू",
+      tips: "सुझावहरू",
+      cost: "अनुमानित लागत",
+      office: "कहाँ जाने",
+      noSteps: "कुनै चरण उपलब्ध छैन।",
+      noDocuments: "कुनै कागजात सूचीबद्ध छैन।",
+      notSpecified: "उल्लेख गरिएको छैन",
+      guidanceFallback: "मार्गदर्शन"
+    }
+  };
+
+  let currentLang = "en";
+
+  function applyTranslations(lang) {
+    const t = translations[lang];
+    document.getElementById('nav-home').textContent = t.navHome;
+    document.getElementById('nav-services').textContent = t.navServices;
+    document.getElementById('nav-about').textContent = t.navAbout;
+    document.getElementById('hero-title').textContent = t.heroTitle;
+    document.getElementById('hero-subtitle').textContent = t.heroSubtitle;
+    document.getElementById('question-input').placeholder = t.placeholder;
+    document.getElementById('ask-btn').textContent = t.askBtn;
+    document.getElementById('popular-heading').textContent = t.popularHeading;
+    const noServicesEl = document.getElementById('no-services-msg');
+    if (noServicesEl) noServicesEl.textContent = t.noServices;
+    document.getElementById('guidance-heading').textContent = t.guidanceHeading;
+    document.getElementById('loading').textContent = t.loading;
+    document.getElementById('footer-text').textContent = t.footerText;
+  }
+
   const input = document.getElementById('question-input');
   const langSelect = document.getElementById('language-select');
   const askBtn = document.getElementById('ask-btn');
@@ -326,37 +394,38 @@
   }
 
   function renderAnswer(answer) {
+    const t = translations[currentLang];
     const stepsHtml = (answer.steps || []).map(s => `<li>${escapeHtml(s)}</li>`).join('');
     const docsHtml = (answer.documents || []).map(d => `<li>${escapeHtml(d)}</li>`).join('');
-    const tipsHtml = (answer.tips || []).map(t => `<li>${escapeHtml(t)}</li>`).join('');
+    const tipsHtml = (answer.tips || []).map(tip => `<li>${escapeHtml(tip)}</li>`).join('');
 
     resultContent.innerHTML = `
       <div class="result-card">
-        <div class="result-title">${escapeHtml(answer.service_name || 'Guidance')}</div>
+        <div class="result-title">${escapeHtml(answer.service_name || t.guidanceFallback)}</div>
 
         <div class="cost-office" style="margin-bottom: 20px;">
           <div class="box">
-            <div class="label">Estimated Cost</div>
-            <div>${escapeHtml(answer.cost || 'Not specified')}</div>
+            <div class="label">${t.cost}</div>
+            <div>${escapeHtml(answer.cost || t.notSpecified)}</div>
           </div>
           <div class="box">
-            <div class="label">Where to Go</div>
-            <div>${escapeHtml(answer.office || 'Not specified')}</div>
+            <div class="label">${t.office}</div>
+            <div>${escapeHtml(answer.office || t.notSpecified)}</div>
           </div>
         </div>
 
-        <h3>Steps</h3>
-        <ol>${stepsHtml || '<li>No steps available.</li>'}</ol>
+        <h3>${t.steps}</h3>
+        <ol>${stepsHtml || `<li>${t.noSteps}</li>`}</ol>
       </div>
 
       <div class="result-card">
-        <h3>Required Documents</h3>
-        <ul>${docsHtml || '<li>No documents listed.</li>'}</ul>
+        <h3>${t.documents}</h3>
+        <ul>${docsHtml || `<li>${t.noDocuments}</li>`}</ul>
       </div>
 
       ${tipsHtml ? `
       <div class="result-card">
-        <h3>Tips</h3>
+        <h3>${t.tips}</h3>
         <ul>${tipsHtml}</ul>
       </div>` : ''}
     `;
@@ -367,6 +436,16 @@
     div.textContent = str;
     return div.innerHTML;
   }
+
+  langSelect.addEventListener('change', () => {
+    currentLang = langSelect.value;
+    applyTranslations(currentLang);
+  });
+
+  langSelect.addEventListener('change', () => {
+    currentLang = langSelect.value;
+    applyTranslations(currentLang);
+  });
 
   askBtn.addEventListener('click', () => {
     const q = input.value.trim();
