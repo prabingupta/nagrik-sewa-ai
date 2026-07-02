@@ -1,16 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Nagarik Sewa AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nagarik Sewa AI — Government Service Guidance</title>
+<style>
+  :root {
+    --navy: #0b3d63;
+    --navy-dark: #072a45;
+    --green: #1a7a4c;
+    --green-dark: #145c39;
+    --bg: #f4f7f9;
+    --card-bg: #ffffff;
+    --border: #dbe4ea;
+    --text: #1f2d3a;
+    --text-light: #5b6b78;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* NAVBAR */
+  header.navbar {
+    background: var(--navy);
+    color: white;
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .navbar .logo {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .navbar .logo span { color: #7fd6a8; }
+  .navbar nav a {
+    color: #e6eef5;
+    text-decoration: none;
+    margin-left: 26px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .navbar nav a:hover { color: #7fd6a8; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 60%, var(--green-dark) 100%);
+    color: white;
+    padding: 70px 24px 90px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    color: #cfe0ea;
+    max-width: 600px;
+    margin: 0 auto 34px;
+  }
+  .search-box {
+    max-width: 640px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 6px 6px 6px 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+  .search-box input[type="text"] {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 14px 8px;
+    color: var(--text);
+  }
+  .search-box select {
+    border: none;
+    background: #eef3f6;
+    border-radius: 6px;
+    padding: 10px 8px;
+    margin-right: 6px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  .search-box button {
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 13px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .search-box button:hover { background: var(--green-dark); }
+
+  /* MAIN CONTENT */
+  main { max-width: 980px; margin: 0 auto; padding: 44px 24px 80px; }
+
+  section.popular h2, section.results h2 {
+    font-size: 1.3rem;
+    margin-bottom: 18px;
+    color: var(--navy);
+  }
+
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 50px;
+  }
+  .service-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--green);
+    border-radius: 8px;
+    padding: 18px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .service-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+  .service-card .name { font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+  .service-card .name-ne { font-size: 0.85rem; color: var(--text-light); }
+
+  /* RESULTS */
+  #results { display: none; }
+  .result-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 26px;
+    margin-bottom: 20px;
+  }
+  .result-card h3 {
+    color: var(--navy);
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .result-card h3::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .result-card ol, .result-card ul { padding-left: 20px; }
+  .result-card li { margin-bottom: 6px; }
+  .result-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--navy-dark);
+    margin-bottom: 20px;
+  }
+  .cost-office {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .cost-office .box {
+    background: #eef6f0;
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .cost-office .box .label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  #loading {
+    display: none;
+    text-align: center;
+    padding: 30px;
+    color: var(--text-light);
+  }
+  #error-box {
+    display: none;
+    background: #fdecea;
+    border: 1px solid #f5c2bc;
+    color: #8a2f22;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  footer {
+    background: var(--navy-dark);
+    color: #cfe0ea;
+    text-align: center;
+    padding: 26px 24px;
+    font-size: 0.85rem;
+    margin-top: 60px;
+  }
+
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 1.7rem; }
+    .search-box { flex-direction: column; align-items: stretch; padding: 14px; }
+    .search-box select, .search-box button { margin: 6px 0 0 0; }
+    .cost-office { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-    <h1>Nagarik Sewa AI — Government Service Guidance</h1>
+
+<header class="navbar">
+  <div class="logo" style="display:flex; align-items:center; gap:10px;">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L4 5V11C4 16.5 7.5 20.5 12 22C16.5 20.5 20 16.5 20 11V5L12 2Z"
+            fill="#7fd6a8" stroke="white" stroke-width="1" stroke-linejoin="round"/>
+      <path d="M9 12L11 14L15 9" stroke="#0b3d63" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Nagarik <span style="color:#7fd6a8;">Sewa</span> AI</span>
+  </div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#popular">Services</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Government Service Guidance, Simplified</h1>
+  <p>Ask about any government service, such as passport, citizenship, or driving license, and get clear, step-by-step guidance instantly.</p>
+
+  <div class="search-box">
+    <input type="text" id="question-input" placeholder="e.g. How do I renew my driving license?">
+    <select id="language-select">
+      <option value="en">English</option>
+      <option value="ne">नेपाली</option>
+    </select>
+    <button id="ask-btn">Ask</button>
+  </div>
+</section>
+
+<main>
+  <section class="popular" id="popular">
     <h2>Popular Services</h2>
-    <ul>
-        {% for service in popular_services %}
-            <li>{{ service.name }} ({{ service.name_nepali }})</li>
-        {% endfor %}
-    </ul>
+    <div class="service-grid">
+      {% for service in popular_services %}
+      <div class="service-card" data-question="How do I apply for {{ service.name }}?">
+        <div class="name">{{ service.name }}</div>
+        <div class="name-ne">{{ service.name_nepali }}</div>
+      </div>
+      {% empty %}
+      <p style="color: var(--text-light);">No popular services added yet. Add some from the admin panel.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <div id="loading">Fetching guidance…</div>
+  <div id="error-box"></div>
+
+  <section class="results" id="results">
+    <h2>Guidance</h2>
+    <div id="result-content"></div>
+  </section>
+</main>
+
+<footer id="about">
+  Nagarik Sewa AI is an independent project to help citizens navigate government services. It is not an official government website.
+</footer>
+
+<script>
+  const input = document.getElementById('question-input');
+  const langSelect = document.getElementById('language-select');
+  const askBtn = document.getElementById('ask-btn');
+  const loading = document.getElementById('loading');
+  const errorBox = document.getElementById('error-box');
+  const resultsSection = document.getElementById('results');
+  const resultContent = document.getElementById('result-content');
+
+  async function askQuestion(question, language) {
+    errorBox.style.display = 'none';
+    resultsSection.style.display = 'none';
+    loading.style.display = 'block';
+
+    try {
+      const res = await fetch('/api/ask/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, language })
+      });
+      const data = await res.json();
+      loading.style.display = 'none';
+
+      if (!res.ok || data.error) {
+        errorBox.textContent = data.error || 'Something went wrong. Please try again.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      renderAnswer(data.answer);
+      resultsSection.style.display = 'block';
+      resultsSection.scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      loading.style.display = 'none';
+      errorBox.textContent = 'Could not reach the server. Please check your connection and try again.';
+      errorBox.style.display = 'block';
+    }
+  }
+
+  function renderAnswer(answer) {
+    const stepsHtml = (answer.steps || []).map(s => `<li>${escapeHtml(s)}</li>`).join('');
+    const docsHtml = (answer.documents || []).map(d => `<li>${escapeHtml(d)}</li>`).join('');
+    const tipsHtml = (answer.tips || []).map(t => `<li>${escapeHtml(t)}</li>`).join('');
+
+    resultContent.innerHTML = `
+      <div class="result-card">
+        <div class="result-title">${escapeHtml(answer.service_name || 'Guidance')}</div>
+
+        <div class="cost-office" style="margin-bottom: 20px;">
+          <div class="box">
+            <div class="label">Estimated Cost</div>
+            <div>${escapeHtml(answer.cost || 'Not specified')}</div>
+          </div>
+          <div class="box">
+            <div class="label">Where to Go</div>
+            <div>${escapeHtml(answer.office || 'Not specified')}</div>
+          </div>
+        </div>
+
+        <h3>Steps</h3>
+        <ol>${stepsHtml || '<li>No steps available.</li>'}</ol>
+      </div>
+
+      <div class="result-card">
+        <h3>Required Documents</h3>
+        <ul>${docsHtml || '<li>No documents listed.</li>'}</ul>
+      </div>
+
+      ${tipsHtml ? `
+      <div class="result-card">
+        <h3>Tips</h3>
+        <ul>${tipsHtml}</ul>
+      </div>` : ''}
+    `;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  askBtn.addEventListener('click', () => {
+    const q = input.value.trim();
+    if (!q) return;
+    askQuestion(q, langSelect.value);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') askBtn.click();
+  });
+
+  document.querySelectorAll('.service-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const q = card.getAttribute('data-question');
+      input.value = q;
+      askQuestion(q, langSelect.value);
+    });
+  });
+</script>
+
 </body>
 </html>
