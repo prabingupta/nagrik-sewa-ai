@@ -1,0 +1,74 @@
+[
+{
+  "model": "services.service",
+  "pk": 1,
+  "fields": {
+    "name": "Passport Application",
+    "name_nepali": "राहदानी आवेदन",
+    "slug": "passport-application",
+    "description": "Apply for a new Nepali passport",
+    "is_popular": true,
+    "created_at": "2026-07-02T05:27:49.947Z"
+  }
+},
+{
+  "model": "services.service",
+  "pk": 2,
+  "fields": {
+    "name": "Citizenship Certificate",
+    "name_nepali": "नागरिकता प्रमाणपत्र",
+    "slug": "citizenship-certificate",
+    "description": "Apply for Nepali citizenship certificate",
+    "is_popular": true,
+    "created_at": "2026-07-02T06:37:11.391Z"
+  }
+},
+{
+  "model": "services.service",
+  "pk": 3,
+  "fields": {
+    "name": "Driving License",
+    "name_nepali": "सवारी चालक अनुमतिपत्र",
+    "slug": "driving-license",
+    "description": "Apply for or renew a driving license",
+    "is_popular": true,
+    "created_at": "2026-07-02T06:37:11.393Z"
+  }
+},
+{
+  "model": "services.service",
+  "pk": 4,
+  "fields": {
+    "name": "Voter ID Registration",
+    "name_nepali": "मतदाता परिचयपत्र दर्ता",
+    "slug": "voter-id-registration",
+    "description": "Register to vote in Nepal elections",
+    "is_popular": true,
+    "created_at": "2026-07-02T06:37:11.394Z"
+  }
+},
+{
+  "model": "services.service",
+  "pk": 5,
+  "fields": {
+    "name": "PAN Card",
+    "name_nepali": "प्यान कार्ड",
+    "slug": "pan-card",
+    "description": "Apply for a Permanent Account Number for tax purposes",
+    "is_popular": true,
+    "created_at": "2026-07-02T06:37:11.395Z"
+  }
+},
+{
+  "model": "services.service",
+  "pk": 6,
+  "fields": {
+    "name": "Birth Certificate",
+    "name_nepali": "जन्म दर्ता प्रमाणपत्र",
+    "slug": "birth-certificate",
+    "description": "Register a birth and get a certificate",
+    "is_popular": true,
+    "created_at": "2026-07-02T06:37:11.396Z"
+  }
+}
+]
