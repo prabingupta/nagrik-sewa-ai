@@ -7,6 +7,14 @@ from .ai_engine import get_service_guidance
 from .models import Service, Query
 
 
+def history(request):
+    """Displays the most recent questions asked, newest first."""
+    queries = Query.objects.select_related("service").order_by("-created_at")[:50]
+    return render(request, "services/history.html", {
+        "queries": queries,
+    })
+
+
 def home(request):
     """Homepage: hero section + popular services."""
     popular_services = Service.objects.filter(is_popular=True)

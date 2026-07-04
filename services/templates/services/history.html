@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Query History — Nagarik Sewa AI</title>
+<style>
+  :root {
+    --navy: #0b3d63;
+    --navy-dark: #072a45;
+    --green: #1a7a4c;
+    --green-dark: #145c39;
+    --bg: #f4f7f9;
+    --card-bg: #ffffff;
+    --border: #dbe4ea;
+    --text: #1f2d3a;
+    --text-light: #5b6b78;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header.navbar {
+    background: var(--navy);
+    color: white;
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .navbar .logo {
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .navbar .logo span:last-child { color: #7fd6a8; }
+  .navbar nav a {
+    color: #e6eef5;
+    text-decoration: none;
+    margin-left: 26px;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .navbar nav a:hover { color: #7fd6a8; }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 44px 24px 80px;
+  }
+  main h1 {
+    color: var(--navy);
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+  main .subtitle {
+    color: var(--text-light);
+    margin-bottom: 30px;
+  }
+
+  .history-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--green);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+  }
+  .history-item .question {
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 6px;
+  }
+  .history-item .meta {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .history-item .lang-badge {
+    display: inline-block;
+    background: #eef6f0;
+    color: var(--green-dark);
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-size: 0.78rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    color: var(--text-light);
+    padding: 60px 20px;
+  }
+
+  footer {
+    background: var(--navy-dark);
+    color: #cfe0ea;
+    text-align: center;
+    padding: 26px 24px;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 640px) {
+    .navbar { padding: 12px 16px; }
+    .navbar nav a { margin-left: 14px; font-size: 0.85rem; }
+    main { padding: 32px 16px 60px; }
+    .history-item { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L4 5V11C4 16.5 7.5 20.5 12 22C16.5 20.5 20 16.5 20 11V5L12 2Z"
+            fill="#7fd6a8" stroke="white" stroke-width="1" stroke-linejoin="round"/>
+      <path d="M9 12L11 14L15 9" stroke="#0b3d63" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Nagarik <span>Sewa</span> AI</span>
+  </div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/history/">History</a>
+    <a href="/#about">About</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Recent Questions</h1>
+  <p class="subtitle">The most recent questions asked on Nagarik Sewa AI, newest first.</p>
+
+  {% for query in queries %}
+    <div class="history-item">
+      <div class="question">{{ query.question }}</div>
+      <div class="meta">
+        <span>{{ query.created_at|date:"M d, Y, g:i A" }}</span>
+        <span class="lang-badge">{{ query.get_language_display }}</span>
+        {% if query.answer_json.service_name %}
+          <span>{{ query.answer_json.service_name }}</span>
+        {% endif %}
+      </div>
+    </div>
+  {% empty %}
+    <div class="empty-state">
+      No questions have been asked yet. <a href="/">Go ask one</a>.
+    </div>
+  {% endfor %}
+</main>
+
+<footer>
+  Nagarik Sewa AI is an independent project to help citizens navigate government services. It is not an official government website.
+</footer>
+
+</body>
+</html>
