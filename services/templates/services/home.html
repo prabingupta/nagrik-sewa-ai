@@ -199,6 +199,20 @@
     padding: 30px;
     color: var(--text-light);
   }
+  .spinner {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border: 3px solid var(--border);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
   #error-box {
     display: none;
     background: #fdecea;
@@ -218,11 +232,26 @@
     margin-top: 60px;
   }
 
+  @media (max-width: 900px) {
+    .service-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
   @media (max-width: 640px) {
-    .hero h1 { font-size: 1.7rem; }
+    .navbar { padding: 12px 16px; }
+    .navbar .logo span:last-child { font-size: 1rem; }
+    .navbar nav a { margin-left: 14px; font-size: 0.85rem; }
+    .hero { padding: 40px 16px 60px; }
+    .hero h1 { font-size: 1.6rem; }
+    .hero p { font-size: 0.95rem; }
     .search-box { flex-direction: column; align-items: stretch; padding: 14px; }
-    .search-box select, .search-box button { margin: 6px 0 0 0; }
+    .search-box input[type="text"] { padding: 12px 8px; }
+    .search-box select, .search-box button { margin: 6px 0 0 0; width: 100%; }
+    main { padding: 32px 16px 60px; }
+    .service-grid { grid-template-columns: 1fr; }
     .cost-office { grid-template-columns: 1fr; }
+    .result-card { padding: 18px 16px; }
+    .result-title { font-size: 1.2rem; }
+    footer { padding: 20px 16px; font-size: 0.8rem; }
   }
 </style>
 </head>
@@ -273,7 +302,7 @@
     </div>
   </section>
 
-  <div id="loading">Fetching guidance...</div>
+  <div id="loading"><span class="spinner"></span><span id="loading-text">Fetching guidance...</span></div>
   <div id="error-box"></div>
 
   <section class="results" id="results">
@@ -282,7 +311,16 @@
   </section>
 </main>
 
-<footer id="about">
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <h2 id="about-heading">About Nagarik Sewa AI</h2>
+    <div class="about-card">
+      <p id="about-body">Nagarik Sewa AI helps citizens understand the steps, documents, fees, and offices involved in common government services, using AI to answer questions in plain language. This is an independent project built to make public information easier to find. It is not affiliated with, endorsed by, or operated by the Government of Nepal, and it is not an official government website. Always verify critical details with the relevant government office before taking action.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
   <span id="footer-text">Nagarik Sewa AI is an independent project to help citizens navigate government services. It is not an official government website.</span>
 </footer>
 
@@ -309,7 +347,9 @@
       noSteps: "No steps available.",
       noDocuments: "No documents listed.",
       notSpecified: "Not specified",
-      guidanceFallback: "Guidance"
+      guidanceFallback: "Guidance",
+      aboutHeading: "About Nagarik Sewa AI",
+      aboutBody: "Nagarik Sewa AI helps citizens understand the steps, documents, fees, and offices involved in common government services, using AI to answer questions in plain language. This is an independent project built to make public information easier to find. It is not affiliated with, endorsed by, or operated by the Government of Nepal, and it is not an official government website. Always verify critical details with the relevant government office before taking action."
     },
     ne: {
       navHome: "गृहपृष्ठ",
@@ -332,7 +372,9 @@
       noSteps: "कुनै चरण उपलब्ध छैन।",
       noDocuments: "कुनै कागजात सूचीबद्ध छैन।",
       notSpecified: "उल्लेख गरिएको छैन",
-      guidanceFallback: "मार्गदर्शन"
+      guidanceFallback: "मार्गदर्शन",
+      aboutHeading: "नागरिक सेवा एआईको बारेमा",
+      aboutBody: "नागरिक सेवा एआईले नागरिकहरूलाई सामान्य सरकारी सेवाहरूसँग सम्बन्धित चरणहरू, कागजातहरू, शुल्क, र कार्यालयहरू बुझ्न मद्दत गर्छ, र सजिलो भाषामा प्रश्नहरूको जवाफ दिन एआई प्रयोग गर्छ। यो सार्वजनिक जानकारी सजिलै पाउन बनाइएको स्वतन्त्र परियोजना हो। यो नेपाल सरकारसँग सम्बद्ध, समर्थित, वा सञ्चालित छैन, र यो कुनै आधिकारिक सरकारी वेबसाइट होइन। कुनै पनि कार्य गर्नु अघि सम्बन्धित सरकारी कार्यालयसँग महत्त्वपूर्ण विवरणहरू पुष्टि गर्नुहोस्।"
     }
   };
 
@@ -351,8 +393,10 @@
     const noServicesEl = document.getElementById('no-services-msg');
     if (noServicesEl) noServicesEl.textContent = t.noServices;
     document.getElementById('guidance-heading').textContent = t.guidanceHeading;
-    document.getElementById('loading').textContent = t.loading;
+    document.getElementById('loading-text').textContent = t.loading;
     document.getElementById('footer-text').textContent = t.footerText;
+    document.getElementById('about-heading').textContent = t.aboutHeading;
+    document.getElementById('about-body').textContent = t.aboutBody;
   }
 
   const input = document.getElementById('question-input');
