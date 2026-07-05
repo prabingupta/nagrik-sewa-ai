@@ -20,7 +20,7 @@
     flex-direction: column;
     min-height: 100vh;
   }
-  main { flex: 1; }
+  main { flex: 1; min-width: 0; width: 100%; }
   header.navbar {
     background: var(--navy);
     color: white;
@@ -85,6 +85,7 @@
   }
   .empty-state a { color: var(--green-dark); font-weight: 600; }
   footer {
+    width: 100%;
     background: var(--navy-dark);
     color: #cfe0ea;
     text-align: center;
