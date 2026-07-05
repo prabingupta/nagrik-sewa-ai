@@ -18,6 +18,24 @@ class Service(models.Model):
         return self.name
 
 
+from django.contrib.auth.models import User
+
+
+class Favorite(models.Model):
+    """A service a user has bookmarked."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favorites")
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name="favorited_by")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "service")
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user.username} → {self.service.name}"
+
+
 class Query(models.Model):
     """Stores each user query and the AI-generated response for history/logging."""
 

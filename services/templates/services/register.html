@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — Nagarik Sewa AI</title>
+<style>
+  :root {
+    --navy: #0b3d63; --navy-dark: #072a45; --green: #1a7a4c; --green-dark: #145c39;
+    --bg: #f4f7f9; --card-bg: #ffffff; --border: #dbe4ea; --text: #1f2d3a; --text-light: #5b6b78;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 60%, var(--green-dark) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .auth-card {
+    background: white;
+    border-radius: 14px;
+    padding: 40px 36px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .auth-card .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+  .auth-card .logo-row span {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .auth-card h1 {
+    font-size: 1.4rem;
+    color: var(--navy-dark);
+    margin-bottom: 22px;
+  }
+  .auth-card form p { margin-bottom: 16px; }
+  .auth-card label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 6px;
+  }
+  .auth-card input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+  }
+  .auth-card input:focus {
+    outline: none;
+    border-color: var(--green);
+  }
+  .auth-card .helptext {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+  .auth-card button {
+    width: 100%;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .auth-card button:hover { background: var(--green-dark); }
+  .auth-card button:active { transform: scale(0.98); }
+  .auth-card .switch-link {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+  }
+  .auth-card .switch-link a {
+    color: var(--green-dark);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .errorlist {
+    list-style: none;
+    color: #c0392b;
+    font-size: 0.82rem;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+  <div class="auth-card">
+    <div class="logo-row">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L4 5V11C4 16.5 7.5 20.5 12 22C16.5 20.5 20 16.5 20 11V5L12 2Z"
+              fill="#1a7a4c" stroke="#0b3d63" stroke-width="1" stroke-linejoin="round"/>
+        <path d="M9 12L11 14L15 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Nagarik Sewa AI</span>
+    </div>
+    <h1>Create your account</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Register</button>
+    </form>
+    <div class="switch-link">
+      Already have an account? <a href="{% url 'services:login' %}">Log In</a>
+    </div>
+  </div>
+</body>
+</html>

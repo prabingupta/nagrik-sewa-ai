@@ -17,12 +17,17 @@
     --text-light: #5b6b78;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
   body {
     font-family: "Segoe UI", Roboto, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
+  main { flex: 1; }
   header.navbar {
     background: var(--navy);
     color: white;
@@ -31,6 +36,84 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 250;
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: white;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(8.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-8.5px) rotate(-45deg); }
+
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 42, 69, 0.55);
+    z-index: 190;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .nav-overlay.visible {
+    display: block;
+    opacity: 1;
+  }
+
+  @media (max-width: 1024px) {
+    .hamburger { display: flex; }
+
+    nav#main-nav {
+      display: flex;
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: 260px;
+      background: var(--navy-dark);
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 90px 28px 28px;
+      gap: 4px;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 200;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+    }
+    nav#main-nav.open {
+      transform: translateX(0);
+    }
+    nav#main-nav a {
+      margin-left: 0;
+      padding: 12px 0;
+      width: 100%;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 1rem;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    nav#main-nav {
+      display: flex;
+      align-items: center;
+    }
   }
   .navbar .logo {
     font-size: 1.3rem;
@@ -119,20 +202,35 @@
 
 <header class="navbar">
   <div class="logo">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M12 2L4 5V11C4 16.5 7.5 20.5 12 22C16.5 20.5 20 16.5 20 11V5L12 2Z"
             fill="#7fd6a8" stroke="white" stroke-width="1" stroke-linejoin="round"/>
       <path d="M9 12L11 14L15 9" stroke="#0b3d63" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <span>Nagarik <span>Sewa</span> AI</span>
   </div>
-  <nav>
+
+  <button class="hamburger" id="hamburger-btn" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav id="main-nav">
     <a href="/">Home</a>
     <a href="/#popular">Services</a>
     <a href="/history/">History</a>
     <a href="/#about">About</a>
+    {% if user.is_authenticated %}
+      <a href="/favorites/">My Favorites</a>
+      <a href="/logout/">Logout ({{ user.username }})</a>
+    {% else %}
+      <a href="/login/">Login</a>
+      <a href="/register/">Register</a>
+    {% endif %}
   </nav>
 </header>
+<div class="nav-overlay" id="nav-overlay"></div>
 
 <main>
   <h1>Recent Questions</h1>
@@ -160,5 +258,28 @@
   Nagarik Sewa AI is an independent project to help citizens navigate government services. It is not an official government website.
 </footer>
 
+<script>
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mainNav = document.getElementById('main-nav');
+  const navOverlay = document.getElementById('nav-overlay');
+
+  function closeDrawer() {
+    hamburgerBtn.classList.remove('open');
+    mainNav.classList.remove('open');
+    navOverlay.classList.remove('visible');
+  }
+
+  hamburgerBtn.addEventListener('click', () => {
+    const isOpen = mainNav.classList.toggle('open');
+    hamburgerBtn.classList.toggle('open', isOpen);
+    navOverlay.classList.toggle('visible', isOpen);
+  });
+
+  navOverlay.addEventListener('click', closeDrawer);
+
+  mainNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeDrawer);
+  });
+</script>
 </body>
 </html>

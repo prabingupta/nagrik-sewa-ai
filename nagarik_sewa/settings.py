@@ -128,5 +128,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_URL = "services:login"
+LOGIN_REDIRECT_URL = "services:home"
+LOGOUT_REDIRECT_URL = "services:home"
+
 # Gemini API
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
