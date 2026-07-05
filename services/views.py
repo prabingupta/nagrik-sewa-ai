@@ -6,7 +6,7 @@ from django.views.decorators.http import require_http_methods
 from .ai_engine import get_service_guidance
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+from .forms import NagarikRegistrationForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -30,13 +30,13 @@ def register_view(request):
         return redirect("services:home")
 
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = NagarikRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
             return redirect("services:home")
     else:
-        form = UserCreationForm()
+        form = NagarikRegistrationForm()
 
     return render(request, "services/register.html", {"form": form})
 

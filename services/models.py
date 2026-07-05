@@ -21,6 +21,16 @@ class Service(models.Model):
 from django.contrib.auth.models import User
 
 
+class UserProfile(models.Model):
+    """Extra profile fields not covered by Django's built-in User model."""
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    age = models.PositiveIntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Profile for {self.user.username}"
+
+
 class Favorite(models.Model):
     """A service a user has bookmarked."""
 
